@@ -1,8 +1,10 @@
-package com.marcelo.filmecoroutineskoin
+package com.marcelo.filmekotlincoroutines
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.marcelo.filmecoroutineskoin.ui.main.MainFragment
+import androidx.fragment.app.Fragment
+import com.marcelo.filmecoroutineskoin.R
+import com.marcelo.filmekotlincoroutines.ui.fragment.MainFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -10,9 +12,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.container, MainFragment.newInstance())
-                .commitNow()
+            replaceFragment(MainFragment())
         }
     }
+}
+
+fun AppCompatActivity.replaceFragment(fragment: Fragment){
+    val fragmentManager = supportFragmentManager
+    val transaction = fragmentManager.beginTransaction()
+    transaction.replace(R.id.container,fragment)
+    transaction.commit()
 }

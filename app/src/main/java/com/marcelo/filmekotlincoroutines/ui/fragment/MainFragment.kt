@@ -1,22 +1,24 @@
-package com.marcelo.filmecoroutineskoin.ui.main
+package com.marcelo.filmekotlincoroutines.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.marcelo.filmecoroutineskoin.R
-import com.marcelo.filmecoroutineskoin.repository.MainRepository
+import com.marcelo.filmekotlincoroutines.ui.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.main_fragment.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class MainFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = MainFragment()
-    }
+    private val name: String = "Marcelo"
 
-    private lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by viewModel {
+        parametersOf(name)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,16 +29,16 @@ class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val viewModel: MainViewModel = ViewModelProvider(this, MainViewModel.ViewModelFactory(
-            MainRepository())).get(MainViewModel::class.java)
 
         viewModel.moviesLiveData.observe(viewLifecycleOwner, { getMovies->
-            txtMovies.text = getMovies[0].title
+           txtMovies.text = getMovies.map {data ->
+                "${data.id} - ${data.title} "
+
+            }.toString()
         })
 
         //viewModel.getMovies()
 
         viewModel.getMoviesCoroutines()
     }
-
 }
